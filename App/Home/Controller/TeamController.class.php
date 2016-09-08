@@ -1,20 +1,7 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: anthony
- * Date: 16/9/7
- * Time: 下午1:09
- */
-
 namespace Home\Controller;
 use Think\Controller;
-
-class WebController extends Controller
-{
-    public function _empty(){
-//        $this->redirect(U('Index/index'));
-        $this->error("您访问的页面不存在");
-    }
+class TeamController extends WebController {
     protected function _initialize(){
         $config = S('DB_CONFIG_DATA');
         if(!$config){
@@ -22,6 +9,9 @@ class WebController extends Controller
             S('DB_CONFIG_DATA',$config);
         }
         C($config);
+        if (!$this->tid = is_login()) {
+            $this->redirect('Public/login');
+        }
         $this->web_path = __ROOT__.'/';     //根目录
         $this->web_title = C('WEB_SITE_TITLE');  //网站标题
         $this->web_keywords=C("WEB_SITE_KEYWORD");  //关键字
@@ -30,5 +20,11 @@ class WebController extends Controller
         $this->web_icp=C("WEB_SITE_ICP");   //备案号
         $this->web_url=C("WEB_URL");    //站点域名地址
     }
-
+    public function index(){
+        $this->team = D('team')->getInfo($this->tid);
+        $this->display();
+    }
+    public function applyList(){
+        $this->display();
+    }
 }

@@ -12,9 +12,12 @@
   <script src="//cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
 </head>
 <body>
-<div class="weui_cells_title">报名登记</div>
+<div class="">
+  <h1 class="page_title">{$index_title}</h1>
+  <p class="page_desc">欢迎您的加入</p>
+</div>
 <form id="form_fill">
-  <input name="tid" value="{$team_id}" type="hidden" />
+  <input name="tid" value="{$team_id}" type="hidden"/>
   <div class="weui_cells weui_cells_form">
     <div class="weui_cell">
       <div class="weui_cell_hd">
@@ -102,6 +105,9 @@
 <div class="weui_btn_area">
   <a class="weui_btn weui_btn_primary" href="javascript:" id="baoming">我要报名</a>
 </div>
+<div class="weui_cells_title" style="text-align: center">Copyright &copy; 2016 {$web_title} {$web_url}<br/>版权所有 {$web_icp}</div>
+
+
 <!--等待-->
 <div id="loadingToast" class="weui_loading_toast" style="display:none;">
   <div class="weui_mask_transparent"></div>
@@ -167,8 +173,8 @@
       },
     })
   });
-  $("#failToast a").click(function(){
-    $("#failToast").css('display','none');
+  $("#failToast a").click(function () {
+    $("#failToast").css('display', 'none');
   });
   $("#baoming").click(function () {
     $("#loadingToast").fadeIn();
@@ -176,14 +182,14 @@
       url: "{:U('Apply/doUpdate')}",
       type: "POST",
       data: $("#form_fill").serialize(),
-      async: false,
+      async: true,
       success: function (data) {
         $("#loadingToast").fadeOut();
         if (data.code == 200) {
           $("#successToast").fadeIn();
           setTimeout(function () {
             $("#successToast").fadeOut();
-            location.href = "{:U('Index/ok')}";
+//            location.href = "{:U('Index/ok')}";
           }, 1000);
         } else {
           $("#failMsg").html(data.msg);
@@ -193,7 +199,7 @@
       error: function (err) {
         console.log(err);
         $("#loadingToast").fadeOut();
-        $("#failMsg").html("失败"+err);
+        $("#failMsg").html("失败" + err);
         $("#failToast").fadeIn();
       },
     })
