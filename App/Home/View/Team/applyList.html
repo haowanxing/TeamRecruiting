@@ -3,34 +3,90 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{$team.name} {$web_title}</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="full-screen" content="yes">
+  <meta name="x5-fullscreen" content="true">
+  <title>{$title}{$web_title}</title>
   <meta name="description" content="{$web_description}"/>
   <meta name="keywords" content="{$web_keywords}"/>
   <link href="//res.wx.qq.com/open/libs/weui/0.4.2/weui.css" rel="stylesheet">
   <link href="__PUBLIC__/css/common.css" rel="stylesheet">
+  <link href="__PUBLIC__/Static/dropload/dropload.css" rel="stylesheet">
   <script src="//cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
+  <load href="__PUBLIC__/Static/dropload/dropload.min.js"/>
+
 </head>
-<body>
-<div class="hd">
-  <a href="{:U('Team/index')}"><h1 class="page_title">TR-System</h1></a>
-  <p class="page_desc">更好的社团招新系统</p>
-</div>
-<div class="weui_panel weui_panel_access">
-  <div class="weui_panel_hd">文字组合列表</div>
-  <div class="weui_panel_bd">
-    <div class="weui_media_box weui_media_text">
-      <h4 class="weui_media_title">标题一</h4>
-      <p class="weui_media_desc">由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。</p>
-    </div>
-    <div class="weui_media_box weui_media_text">
-      <h4 class="weui_media_title">标题二</h4>
-      <p class="weui_media_desc">由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。</p>
+<body ontouchstart>
+<div class="container" id="container">
+  <div class="tabbar">
+    <div class="weui_tab">
+      <div class="weui_tab_bd">
+        <div class="weui_cells weui_cells_access content">
+          <div class="weui_panel_bd lists">
+            <volist name="list" id="vo" empty="暂时没有数据">
+              <div class="weui_media_box weui_media_text">
+                <h4 class="weui_media_title">{$vo.name} ({$vo.stuid}) {$vo.time|date="y-m-d H:m",###}</h4>
+                <p class="weui_media_desc">电话:{$vo.phone} {$vo.deptname}-{$vo.majorname}<br/> {$vo.interest}</p>
+              </div>
+            </volist>
+          </div>
+        </div>
+      </div>
+      <div class="weui_tabbar">
+        <include file="./Public/Static/tpl/tabbar.html"/>
+      </div>
     </div>
   </div>
-  <a href="javascript:void(0);" class="weui_panel_ft">查看更多</a>
 </div>
-
 <load href="__PUBLIC__/js/public.js"/>
+<script>
+  $(function () {
+    var page = 2;
+    $('.content').dropload({
+      scrollArea: window,
+      autoLoad: false,
+      loadDownFn: function (me) {
+        var sendData = {page: page};
+        $.ajax({
+          type: 'GET',
+          url: '',
+          data: sendData,
+          dataType: 'json',
+          success: function (data) {
+            var result = '';
+            if (data.code == 200) {
+              page++;
+              var lists = data.data;
+              console.log(lists);
+              for (var i = 0; i < lists.length; i++) {
+                result += '<div class="weui_media_box weui_media_text">' +
+                    '<h4 class="weui_media_title">' + lists[i].name + ' (' + lists[i].stuid + ') ' + lists[i].time + '</h4>'
+                    + '<p class="weui_media_desc">电话:' + lists[i].phone + ' ' + lists[i].deptname + '-' + lists[i].majorname + '<br/> ' + lists[i].interest + '</p>'
+                    + '</div>';
+              }
+            } else {
+              // 锁定
+              me.lock();
+              // 无数据
+              me.noData();
+              //              break;
+            }
+            // 为了测试，延迟1秒加载
+            setTimeout(function () {
+              $('.lists').append(result);
+              // 每次数据加载完，必须重置
+              me.resetload();
+            }, 1000);
+          },
+          error: function (xhr, type) {
+            alert('Ajax error!');
+            // 即使加载出错，也得重置
+            me.resetload();
+          }
+        });
+      }
+    });
+  });
+</script>
 </body>
 </html>

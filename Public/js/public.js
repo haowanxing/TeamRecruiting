@@ -26,4 +26,4 @@ $(function() {
             $(".passcode").attr("src", verifyimg.replace(/\?.*$/, '') + '?' + Math.random());
         }
     });
-})
+});

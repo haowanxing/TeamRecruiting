@@ -11,6 +11,8 @@ class TeamController extends WebController {
         C($config);
         if (!$this->tid = is_login()) {
             $this->redirect('Public/login');
+        }else{
+            $this->team = D('team')->getInfo($this->tid);
         }
         $this->web_path = __ROOT__.'/';     //根目录
         $this->web_title = C('WEB_SITE_TITLE');  //网站标题
@@ -21,10 +23,35 @@ class TeamController extends WebController {
         $this->web_url=C("WEB_URL");    //站点域名地址
     }
     public function index(){
-        $this->team = D('team')->getInfo($this->tid);
         $this->display();
     }
-    public function applyList(){
-        $this->display();
+    public function applyList($page = 1,$condition = null){
+        if($condition){
+            $condition = json_decode($condition,true);
+        }
+        $this->list = D('Apply')->getList($this->tid,$page,$condition);
+        if(IS_AJAX){
+            if($this->list){
+                $retMsg = array('code'=>200,'data'=>$this->list);
+            }else{
+                $retMsg = array('code'=>400,'msg'=>'empty');
+            }
+            $this->ajaxReturn($retMsg);
+        }else{
+            $this->title = '申请表-';
+            $this->display();
+        }
+    }
+    public function info(){
+        if(IS_AJAX){
+            if($res = D('Team')->updateInfo($this->tid)){
+                $retMsg = array('code'=>200,'data'=>$res,);
+            }else{
+                $retMsg = array('code'=>400,'data'=>$res,'msg'=>'更新失败');
+            }
+            $this->ajaxReturn($retMsg);
+        }else{
+            $this->display();
+        }
     }
 }

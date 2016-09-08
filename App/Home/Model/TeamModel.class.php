@@ -20,4 +20,11 @@ class TeamModel extends Model
     {
         return $this->field('password', true)->where('id=' . $tid)->find();
     }
+    public function updateInfo($tid){
+        if($data = $this->create()){
+            return $this->where('id='.$tid)->save($data);
+        }else{
+            return false;
+        }
+    }
 }
