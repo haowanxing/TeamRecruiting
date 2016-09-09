@@ -16,6 +16,7 @@ class WebController extends Controller
         $this->error("您访问的页面不存在");
     }
     protected function _initialize(){
+        define('TID',is_login());
         $config = S('DB_CONFIG_DATA');
         if(!$config){
             $config = config_lists();

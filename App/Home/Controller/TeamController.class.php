@@ -25,6 +25,17 @@ class TeamController extends WebController {
     public function index(){
         $this->display();
     }
+    public function password(){
+        if(false !== D('Team')->password($this->tid)){
+            $this->success('密码修改成功！');
+        } else {
+            $error = D('Team')->getError();
+            $this->error(empty($error) ? '未知错误！' : $error);
+        }
+    }
+    public function chpwd(){
+        $this->display();
+    }
     public function applyList($page = 1,$condition = null){
         if($condition){
             $condition = json_decode($condition,true);

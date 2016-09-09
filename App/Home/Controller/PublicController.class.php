@@ -305,7 +305,8 @@ CETNT;
     protected function pwdMail($uid, $username, $password)
     {
         $url = $this->web_url . U('public/forgetpwd',array('step'=>3,'uid'=>$uid,'key'=>$password));
-        return sendMail($username, $this->web_title . '-密码找回', '您好: 您最近提出了密码重设请求。要完成此过程，请点按以下链接: <a href="' . $url . '" target="_blank">' . $url . '</a>如果您未提出此请求，可能是其他用户无意中输入了您的电子邮件地址，您的帐户仍然安全。
+        return sendMail($username, $this->web_title . '-密码找回', '您好: 您最近提出了密码重设请求。要完成此过程，请点按以下链接: <a href="' . $url . '" target="_blank">' . $url . '</a>
+        <br/>如果您未提出此请求，可能是其他用户无意中输入了您的电子邮件地址，您的帐户仍然安全。
         请勿回复本邮件, 此邮箱未受监控, 您不会得到任何回复。
         如果点击上面的链接无效，请尝试将链接复制到浏览器地址栏访问。');
     }

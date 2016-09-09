@@ -27,4 +27,27 @@ class TeamModel extends Model
             return false;
         }
     }
+    public function password($tid = TID){
+        if(!$data = $this->create()){
+            return false;
+        }
+        if(I('post.password') !== I('post.repassword')){
+            $this->error = '您输入的新密码与确认密码不一致！';
+            return false;
+        }
+        if(!$this->verifyUser($tid, I('post.oldpassword'))){
+            $this->error = '验证出错：密码不正确！';
+            return false;
+        }
+        $this->id=$tid;
+        $res = $this->save();
+        return $res;
+    }
+    protected function verifyUser($uid, $password_in){
+        $password = $this->getFieldById($uid, 'password');
+        if(think_ucenter_md5($password_in) === $password){
+            return true;
+        }
+        return false;
+    }
 }

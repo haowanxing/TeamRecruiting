@@ -10,11 +10,11 @@ class ApplyModel extends RelationModel
             array('stuId', 'require', '学号必须填写！'),
             array('stuId', 'number', '学号必须为数字！'),
             array('stuId', '8,12', '学号长度必须为8-12位！', 0, 'length'),
-            array('stuId', '', '您已经提交过申请了！', 0, 'unique', 1),
             array('phone', 'require', '手机必须填写！'),
             array('phone', 'number', '手机必须为数字！'),
             array('phone', '11', '手机长度必须为11位！', 0, 'length'),
-            array('phone', '', '手机号已经存在！', 0, 'unique', 1),
+            array('tid,stuId', 'checkApply', '你已经申请过该社团', 1, 'callback',1),
+//            array('phone', '', '手机号重复！', 0, 'unique'),
     );
     protected $_auto = array(
             array('time', NOW_TIME, 1),
@@ -52,6 +52,15 @@ class ApplyModel extends RelationModel
 
         }
         return $data;
+    }
+    public function checkApply($map){
+        $data['tid'] = $map['tid'];
+        $data['stuId'] = $map['stuId'];
+        if($this->where($data)->find()){
+            return false;
+        }else{
+            return true;
+        }
     }
 
     public function getList($tid, $page = 1,$condition = null)
