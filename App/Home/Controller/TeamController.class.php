@@ -65,6 +65,26 @@ class TeamController extends WebController {
             $this->display();
         }
     }
+    public function setting(){
+        if(I('switch')){
+            switch(I('switch')){
+                case 'notice':
+                    $to = $this->team['notice']==1?'0':'1';
+                    if(M('Team')->where('id='.$this->tid)->setField('notice',$to)){
+                        $tips = $to?"开":"关";
+                        $this->success("通知状态:".$tips);
+                    }else{
+                        $this->error("发生了错误");
+                    }
+                    break;
+                default:
+                    $this->error('你按了什么东西');
+                    break;
+            }
+        }else{
+            $this->display();
+        }
+    }
     public function myQR(){
         $this->display();
     }

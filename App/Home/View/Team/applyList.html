@@ -40,6 +40,17 @@
 </div>
 <load href="__PUBLIC__/js/public.js"/>
 <script>
+
+  function timestampFormat(time){
+    var date = new Date(time*1000);
+    Y = date.getYear()-100;
+    M = ("0"+(date.getMonth()+1)).slice(-2);
+    D = ("0"+date.getDate()).slice(-2);
+    h = ("0"+date.getHours()).slice(-2);
+    m = ("0"+date.getMinutes()).slice(-2);
+    s = date.getSeconds();
+    return Y+'-'+M+'-'+D+' '+h+':'+m+'';
+  }
   $(function () {
     var page = 2;
     $('.content').dropload({
@@ -60,7 +71,7 @@
               console.log(lists);
               for (var i = 0; i < lists.length; i++) {
                 result += '<div class="weui_media_box weui_media_text">' +
-                    '<h4 class="weui_media_title">' + lists[i].name + ' (' + lists[i].stuid + ') ' + lists[i].time + '</h4>'
+                    '<h4 class="weui_media_title">' + lists[i].name + ' (' + lists[i].stuid + ') ' + dateFactory('YY-MM-DD hh:mm',lists[i].time*1000) + '</h4>'
                     + '<p class="weui_media_desc">电话:' + lists[i].phone + ' ' + lists[i].deptname + '-' + lists[i].majorname + '<br/> ' + lists[i].interest + '</p>'
                     + '</div>';
               }
