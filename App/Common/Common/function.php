@@ -74,5 +74,39 @@ function SendMail($address, $title, $message, $fromname = '创明软件工作室
     $mail->Username = C('MAIL_LOGINNAME');
     $mail->Password = C('MAIL_PASSWORD');
     $mail->IsHTML(C('MAIL_HTML'));
+    $mail->SMTPSecure = C('MAIL_SECURE');
+    $mail->Port = C('MAIL_PORT');
     return ($mail->Send());
+}
+function SendMail_Sock($address, $title, $message, $fromname = '创明软件工作室')
+{
+    $post_url = C("WEB_URL").U('Api/sendEmail');
+    $arr=array(
+            'address'=>$address,
+            'title'=>$title,
+            'message'=>$message,
+            'fromname'=>$fromname,
+    );
+    ksort($arr);
+    $arrstr = implode($arr);
+    $arrstr = sha1($arrstr);
+    $arr['signature'] = $arrstr;
+
+    return sock_post($post_url,$arr);
+}
+//fsockopen模拟POST
+function sock_post($url,$data=array()){
+    // $query = http_build_query($data);
+    $query = json_encode($data);
+    $info = parse_url($url);
+    $fp = fsockopen($info["host"], 80, $errno, $errstr, 8);
+    $head = "POST ".$info['path']."?".$info["query"]." HTTP/1.0\r\n";
+    $head .= "Host: ".$info['host']."\r\n";
+    $head .= "Referer: http://".$info['host'].$info['path']."\r\n";
+    $head .= "Content-type: application/x-www-form-urlencoded\r\n";
+    $head .= "Content-Length: ".strlen(trim($query))."\r\n";
+    $head .= "\r\n";
+    $head .= trim($query);
+    $write = fputs($fp, $head);
+    return $write;
 }

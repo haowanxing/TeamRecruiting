@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>用户注册-{$web_title}</title>
+  <title>忘记密码-{$web_title}</title>
   <meta name="description" content="{$web_description}"/>
   <meta name="keywords" content="{$web_keywords}"/>
   <link href="//res.wx.qq.com/open/libs/weui/0.4.2/weui.css" rel="stylesheet">
@@ -14,13 +14,12 @@
 <div class="weui_msg">
   <div class="weui_icon_area"><i class="weui_icon_success weui_icon_msg"></i></div>
   <div class="weui_text_area">
-    <h2 class="weui_msg_title">用户激活</h2>
-      <!--<p class="weui_msg_desc">您的登录名为：<span class="red">{$user}</span> 验证信息已发送至注册邮箱为了确保您账户的安全，请验证邮箱并完成注册。</p>-->
-      <p class="weui_msg_desc">您的登录名为：<span class="red">{$user}</span> 验证信息已发送至注册邮箱,如果超时间没收到,请点击下面的按钮重新发送。</p>
+    <h2 class="weui_msg_title">验证邮箱</h2>
+    <p class="weui_msg_desc">验证邮件已经发送至：<span class="red">{$username}</span> 验证信息已发送至注册邮箱,如果超时间没收到,请点击下面的按钮重新发送。</p>
   </div>
   <div class="weui_opr_area">
     <p class="weui_btn_area">
-      <button class="weui_btn weui_btn_default ajax-get" url="{:U('public/againmail?uid='.$uid)}">再次发送</button>
+      <button class="weui_btn weui_btn_default ajax-get" url="{:U('public/againpwd',array('uid'=>$uid))}">再次发送</button>
     </p>
   </div>
   <div class="weui_extra_area">

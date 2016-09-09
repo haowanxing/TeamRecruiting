@@ -54,4 +54,7 @@ class TeamController extends WebController {
             $this->display();
         }
     }
+    public function myQR(){
+        $this->display();
+    }
 }

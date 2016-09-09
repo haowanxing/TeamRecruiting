@@ -33,7 +33,7 @@ class PublicController extends WebController
         if (IS_POST) {
             $user = D('Public')->login($email, $password);
             if ($user[0] > 0) {
-                $this->success('登录成功！', U('Index/index'));
+                $this->success('登录成功！', U('Team/index'));
             } else { //登录失败
                 switch ($user[0]) {
                     case -1:
@@ -59,7 +59,7 @@ class PublicController extends WebController
             }
         } else {
             if (is_login()) {
-                $this->redirect('Index/index');
+                $this->redirect('Team/index');
             } else {
                 $this->display();
             }
@@ -97,8 +97,13 @@ class PublicController extends WebController
             } else {
                 $map['email'] = I('email');
             }
-            if (M('Team')->where($map)->getField('id')) {
-                $this->error('用户已经注册！');
+            if ($User = M('Team')->where($map)->field('id,activation')->find()) {
+                if($User['activation'] == 0){
+                    session('email',I('email'));
+                    $this->error('用户之前已经注册过了,但是还没验证激活',U('Public/email'));
+                }else{
+                    $this->error('用户已经注册！');
+                }
             }
             if (!$this->check_name(I('email'))) {
                 $this->error('请正确输入注册邮箱或手机号');
@@ -110,8 +115,7 @@ class PublicController extends WebController
                     session('email', I('email'));
                     $this->success('用户注册成功！', U('Public/phone'));
                 } else {
-                    $email_status = $this->jhMail($uid, I('email'), think_ucenter_md5(I('password')));
-                    session('email_status',$email_status);
+                    $this->jhMail($uid, I('email'), think_ucenter_md5(I('password')));
                     $this->success('用户注册成功！', U('Public/email'));
                 }
             } else {
@@ -136,12 +140,12 @@ class PublicController extends WebController
         $verify->entry(1);
     }
 
-    public function againmail($uid)
+    public function againmail($uid = 0)
     {
         $map = array('id' => $uid, 'status' => 1, 'activation' => 0);
         $user = M('Team')->field('id,email,password')->where($map)->find();
         if ($user) {
-            if ($this->jhMail($user['id'], $user['email'], $user['password'])) {
+            if ($this->jhMail($user['id'], $user['email'], $user['password'], false)) {
                 $this->success('发送成功请查收！');
             } else {
                 $this->error('发送失败请从新发送！');
@@ -149,10 +153,21 @@ class PublicController extends WebController
         }
     }
 
-    protected function jhMail($uid, $username, $password)
+    protected function jhMail($uid, $username, $password, $async = true)
     {
         $url = $this->web_url . U('public/email',array('uid'=>$uid,'key'=>$password));
-        return sendMail($username, '感谢您注册' . $this->web_title . '-帐号激活邮件', '<div class="wrapper" style="margin: 20px auto 0; width: 500px; padding-top:16px; padding-bottom:10px;"><br style="clear:both; height:0"><div class="content" style="background: none repeat scroll 0 0 #FFFFFF; border: 1px solid #E9E9E9; margin: 2px 0 0; padding: 30px;"><p>您好: </p><p>感谢您注册 <a href="' . $this->web_url . '">' . $this->web_title . '</a></p><p style="border-top: 1px solid #DDDDDD;margin: 15px 0 25px;padding: 15px;">请点击以下链接激活并设置您的账号: <a href="' . $url . '" target="_blank">' . $url . '</a></p><p style="border-top: 1px solid #DDDDDD; padding-top:6px; margin-top:25px; color:#838383;"><p>请勿回复本邮件, 此邮箱未受监控, 您不会得到任何回复。</p><p>如果点击上面的链接无效，请尝试将链接复制到浏览器地址栏访问。</p></p></div></div>');
+        $title = '感谢您注册' . $this->web_title . '-帐号激活邮件';
+//        $content = '<div class="wrapper" style="margin: 20px auto 0; width: 500px; padding-top:16px; padding-bottom:10px;"><br style="clear:both; height:0"><div class="content" style="background: none repeat scroll 0 0 #FFFFFF; border: 1px solid #E9E9E9; margin: 2px 0 0; padding: 30px;"><p>您好: </p><p>感谢您注册 <a href="' . $this->web_url . '">' . $this->web_title . '</a></p><p style="border-top: 1px solid #DDDDDD;margin: 15px 0 25px;padding: 15px;">请点击以下链接激活并设置您的账号: <a href="' . $url . '" target="_blank">' . $url . '</a></p><p style="border-top: 1px solid #DDDDDD; padding-top:6px; margin-top:25px; color:#838383;"><p>请勿回复本邮件, 此邮箱未受监控, 您不会得到任何回复。</p><p>如果点击上面的链接无效，请尝试将链接复制到浏览器地址栏访问。</p></p></div></div>';
+        $content = <<<CETNT
+您好: 感谢您注册 $this->web_title
+<p>请点击以下链接激活并设置您的账号: <a href="$url" target="_blank">$url</a></p>
+<p>请勿回复本邮件, 此邮箱未受监控, 您不会得到任何回复。</p>
+<p>如果点击上面的链接无效，请尝试将链接复制到浏览器地址栏访问。</p>
+CETNT;
+        if($async){ //异步发送
+            return SendMail_Sock($username, $title, $content);
+        }
+        return SendMail($username, $title, $content);
     }
     public function againpwd($uid){
         $map=array('id' => $uid,'status'=>1);
@@ -172,7 +187,6 @@ class PublicController extends WebController
             session('email', null);
             $this->success('邮箱验证成功请登录！', U('Public/login'));
         } else {
-            $this->assign('email_status',session('email_status'));
             $this->assign('user', session('email'));
             $this->assign('uid', M('Team')->where(array('email' => session('email')))->getField('id'));
             $this->display();
@@ -214,27 +228,26 @@ class PublicController extends WebController
         switch ($step) {
             case 1:
                 if(IS_POST){
-                    /* 检测验证码 TODO: */
                     if(!check_verify(I("passcode"))){$this->error("验证码错误！");}
-                    if(I('email')){
-                        if(is_numeric(I('email'))){
+                    if(I('username')){
+                        if(is_numeric(I('username'))){
                             $map['phone']=I('username');
                         }else{
-                            $map['email']=I('email');
+                            $map['email']=I('username');
                         }
                         $map['status']=1;
                         if($user=M('Team')->field('id,email,password,phone')->where($map)->find()){
-                            if(is_numeric(I('email'))){
-                                session('email',$user['phone']);
-                                $this->success('验证手机！',U('Public/forgetpwd/step/2/uid/'.$user['id']));
+                            if(is_numeric(I('username'))){
+                                session('username',$user['phone']);
+                                $this->success('验证手机！',U('Public/forgetpwd',array('step'=>2,'uid'=>$user['id'])));
                             }else{
                                 $this->pwdMail($user['id'],$user['email'],$user['password']);
-                                session('email',$user['email']);
-                                $this->success('邮箱发送成功！',U('Public/forgetpwd/step/2/uid/'.$user['id']));
+                                session('username',$user['email']);
+                                $this->success('邮箱发送成功！',U('Public/forgetpwd',array('step'=>2,'uid'=>$user['id'])));
                             }
                         }else{$this->error('没有该用户！');}
                     }else{$this->error('请输入用户名！');}
-                }else{$this->display($this->tplpath."findpwd_1.html");}
+                }else{$this->display("findpwd_1");}
                 break;
             case 2:
                 if(IS_POST){
@@ -242,18 +255,18 @@ class PublicController extends WebController
                         $map=array('id' => I('post.uid'),'status'=>1);
                         $user=M('Team')->field('id,password')->where($map)->find();
                         session('cell_code', null);
-                        session('email',null);
+                        session('username',null);
                         $this->success('手机验证成功请重新设置密码！',U('Public/forgetpwd',array('step'=>3,'uid'=>$user['id'],'key'=>$user['password'])));
                     }else{
                         $this->error('手机验证失败！');
                     }
                 }else{
                     $this->assign('uid',I('uid',0,'intval'));
-                    $this->assign('email',session('email'));
+                    $this->assign('email',session('username'));
                     if(is_numeric(session('username'))){
-                        $this->display($this->tplpath."findpwd_2_phone.html");
+                        $this->display("findpwd_2_phone");
                     }else{
-                        $this->display($this->tplpath."findpwd_2.html");
+                        $this->display("findpwd_2");
                     }
                 }
                 break;
@@ -277,7 +290,7 @@ class PublicController extends WebController
                     if(M('Team')->where($map)->getField('id')){
                         session('password',I('key'));
                         session('uid',I('uid',0,'intval'));
-                        $this->display($this->tplpath."findpwd_3.html");
+                        $this->display("findpwd_3");
                     }else{
                         $this->error('请不要到你不该来的地方！',U('index/index'));
                     }
@@ -291,8 +304,10 @@ class PublicController extends WebController
     }
     protected function pwdMail($uid, $username, $password)
     {
-        $url = $this->web_url . U('public/email',array('step'=>3,'uid'=>$uid,'key'=>$password));
-        return sendMail($username, $this->web_title . '-密码找回', '<div class="wrapper" style="margin: 20px auto 0; width: 500px; padding-top:16px; padding-bottom:10px;"><br style="clear:both; height:0"><div class="content" style="background: none repeat scroll 0 0 #FFFFFF; border: 1px solid #E9E9E9; margin: 2px 0 0; padding: 30px;"><p>您好: </p><p style="border-top: 1px solid #DDDDDD;margin: 15px 0 25px;padding: 15px;">您最近提出了密码重设请求。要完成此过程，请点按以下链接: <a href="' . $url . '" target="_blank">' . $url . '</a></p><p style="border-top: 1px solid #DDDDDD; padding-top:6px; margin-top:25px; color:#838383;"><p>如果您未提出此请求，可能是其他用户无意中输入了您的电子邮件地址，您的帐户仍然安全。</p><p>请勿回复本邮件, 此邮箱未受监控, 您不会得到任何回复。</p><p>如果点击上面的链接无效，请尝试将链接复制到浏览器地址栏访问。</p></p></div></div>');
+        $url = $this->web_url . U('public/forgetpwd',array('step'=>3,'uid'=>$uid,'key'=>$password));
+        return sendMail($username, $this->web_title . '-密码找回', '您好: 您最近提出了密码重设请求。要完成此过程，请点按以下链接: <a href="' . $url . '" target="_blank">' . $url . '</a>如果您未提出此请求，可能是其他用户无意中输入了您的电子邮件地址，您的帐户仍然安全。
+        请勿回复本邮件, 此邮箱未受监控, 您不会得到任何回复。
+        如果点击上面的链接无效，请尝试将链接复制到浏览器地址栏访问。');
     }
 
     /**
@@ -400,9 +415,9 @@ class PublicController extends WebController
     protected function check_name($username)
     {
         if (is_numeric($username)) {
-            return (ereg("^(0|86|17951)?(13[0-9]|15[012356789]|18[0-9]|14[57])[0-9]{8}$", $username));
+            return (preg_match("^(0|86|17951)?(13[0-9]|15[012356789]|18[0-9]|14[57])[0-9]{8}$", $username));
         } else {
-            return (ereg("^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+", $username));
+            return (preg_match('/\w+@(\w|\d)+\.\w{2,3}/i', $username));
         }
     }
 }

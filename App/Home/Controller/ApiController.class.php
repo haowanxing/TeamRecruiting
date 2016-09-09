@@ -20,4 +20,17 @@ class ApiController extends WebController {
             echo 0;
         }
     }
+    public function sendEmail(){
+        if(IS_POST){
+            $input = file_get_contents("php://input");
+            $data = json_decode($input,true);
+            $signature = $data['signature'];
+            unset($data['signature']);
+            ksort($data);
+            $sign = sha1(implode($data));
+            if($sign == $signature){
+                SendMail($data['address'],$data['title'], $data['message'], $data['fromname']);
+            }
+        }
+    }
 }
