@@ -81,6 +81,9 @@ class PublicController extends WebController
         if (!C('USER_ALLOW_REGISTER')) {
             $this->error('注册已经关闭，请稍后注册~');
         }
+        if(is_login()){
+            $this->error('请退出当前用户再进行操作',U('Team/index'));
+        }
         if (IS_POST) {
             /* 检测验证码 TODO: */
             if (!check_verify(I("passcode"))) {
