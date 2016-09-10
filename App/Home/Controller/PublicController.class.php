@@ -424,4 +424,19 @@ CETNT;
             return (preg_match('/\w+@(\w|\d)+\.\w{2,3}/i', $username));
         }
     }
+    public function feedback(){
+        if(IS_POST){
+            if($data = D('Feedback')->create()){
+                if(D('Feedback')->add($data)){
+                    $this->success('感谢您的反馈!',U('Team/index'));
+                }else{
+                    $this->error('系统出错啦');
+                }
+            }else{
+                $this->error(D('Feedback')->getError());
+            }
+        }else{
+            $this->display();
+        }
+    }
 }
