@@ -14,15 +14,12 @@
 <body>
 <div class="weui_tab">
   <div class="weui_tab_bd">
-    <div class="hd">
-      <h1 class="page_title">TR-System</h1>
-      <p class="page_desc">更好的社团招新系统</p>
-    </div>
+    <include file="./Public/Static/tpl/banner.html"/>
     <div class="weui_cells_title">
       <p class="page_desc">扫描加入{$team.name}</p>
     </div>
     <article class="weui_article">
-      <p>
+      <p style="text-align: center;">
         <img src="http://api.fantwo.com/png/qrcode.png?size=10&level=Q&data={$web_url}{:U('Apply/index','t='.$tid)}" alt="">
       </p>
     </article>
