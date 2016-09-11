@@ -7,7 +7,7 @@
 #
 # Host: localhost (MySQL 5.6.19)
 # Database: teamrecruit
-# Generation Time: 2016-09-09 12:23:07 +0000
+# Generation Time: 2016-09-11 05:03:03 +0000
 # ************************************************************
 
 
@@ -39,6 +39,7 @@ CREATE TABLE `tr_apply` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+
 # Dump of table tr_config
 # ------------------------------------------------------------
 
@@ -69,26 +70,32 @@ LOCK TABLES `tr_config` WRITE;
 INSERT INTO `tr_config` (`id`, `name`, `type`, `title`, `group`, `extra`, `remark`, `create_time`, `update_time`, `value`, `sort`, `display`)
 VALUES
 	(1,'WEB_SITE_TITLE',1,'网站标题',1,'','网站标题前台显示标题',1378898976,1379235274,'招新系统',4,1),
-	(2,'WEB_SITE_DESCRIPTION',2,'网站描述',1,'','网站搜索引擎描述',1378898976,1379235841,'招新工作正在展开',5,1),
-	(6,'WEB_URL',1,'网站地址',1,'','网站域名地址',0,0,'http://www.example.com/',2,1),
-	(3,'WEB_SITE_KEYWORD',2,'网站关键字',1,'','网站搜索引擎关键字',1378898976,1381390100,'团队招新',6,1),
+	(2,'WEB_SITE_DESCRIPTION',2,'网站描述',1,'','网站搜索引擎描述',1378898976,1379235841,'创明软件工作室2017年招新工作正在展开',5,1),
+	(6,'WEB_URL',1,'网站地址',1,'','网站域名地址',0,0,'http://192.168.31.5/',2,1),
+	(3,'WEB_SITE_KEYWORD',2,'网站关键字',1,'','网站搜索引擎关键字',1378898976,1381390100,'团队招新,创明软件工作室招新,2017招新',6,1),
 	(4,'WEB_SITE_CLOSE',4,'关闭站点',1,'0:关闭\r\n1:开启','站点关闭后其他用户不能访问，管理员可以正常访问',1378898976,1379235296,'1',0,1),
-	(5,'WEB_SITE_ICP',1,'网站备案号',1,'','设置在网站底部显示的备案号，如“沪ICP备00000001号',1378900335,1379235859,'沪ICP备00000001号',7,1),
+	(5,'WEB_SITE_ICP',1,'网站备案号',1,'','设置在网站底部显示的备案号，如“沪ICP备12007941号-2',1378900335,1379235859,'鄂ICP备0000000号',7,1),
 	(7,'WEB_NAME',1,'网站名称',1,'','网站名称',0,0,'社团招新管理系统',1,1),
 	(8,'WEB_LOGO',1,'网站logo',1,'','',0,0,'logo.png',3,1),
-	(9,'MAIL_SMTP',1,'SMTP服务器地址',1,'','SMTP服务器的地址',0,0,'smtp.exmail.qq.com',0,0),
-	(10,'MAIL_PORT',1,'SMTP服务器端口',1,'','SMTP服务器端口',0,0,'465',0,0),
-	(11,'MAIL_ADDRESS',1,'邮箱地址',1,'','发件邮箱地址',0,0,'example@qq.com',0,0),
-	(12,'MAIL_PASSWORD',1,'邮箱密码',1,'','发件邮箱密码',0,0,'emailpassword',0,0),
-	(13,'MAIL_LOGINNAME',1,'邮箱登录账号',1,'','登录邮箱账号',0,0,'example@qq.com',0,0),
-	(14,'MAIL_AUTH',4,'邮箱认证',1,'0:关闭\n1:开启','邮箱是否需要登录认证',0,0,'1',0,0),
-	(15,'MAIL_HTML',4,'HTML格式',1,'0:TXT\n1:HTML','邮件内容的格式',0,0,'1',0,0),
-	(18,'MAIL_CHARSET',1,'邮件编码格式',1,'','推荐使用UTF-8',0,0,'UTF-8',0,0),
+	(9,'MAIL_SMTP',1,'SMTP服务器地址',2,'','SMTP服务器的地址',0,0,'smtp.exmail.qq.com',0,1),
+	(10,'MAIL_PORT',1,'SMTP服务器端口',2,'','SMTP服务器端口',0,0,'465',0,1),
+	(11,'MAIL_ADDRESS',1,'邮箱地址',2,'','发件邮箱地址',0,0,'',0,1),
+	(12,'MAIL_PASSWORD',1,'邮箱密码',2,'','发件邮箱密码',0,0,'',0,1),
+	(13,'MAIL_LOGINNAME',1,'邮箱登录账号',2,'','登录邮箱账号',0,0,'',0,1),
+	(14,'MAIL_AUTH',4,'邮箱认证',2,'0:关闭\n1:开启','邮箱是否需要登录认证',0,0,'1',0,1),
+	(15,'MAIL_HTML',4,'HTML格式',2,'0:TXT\n1:HTML','邮件内容的格式',0,0,'1',0,1),
+	(18,'MAIL_CHARSET',1,'邮件编码格式',2,'','推荐使用UTF-8',0,0,'UTF-8',0,1),
 	(19,'USER_ALLOW_REGISTER',4,'是否允许用户注册',3,'0:关闭注册\r\n1:允许注册','是否开放用户注册',1379504487,1379504580,'1',0,1),
 	(20,'AlidayuAppKey',1,'大鱼Key',7,'','',0,0,'',0,1),
 	(21,'AlidayuAppSecret',1,'大鱼Secret',7,'','',0,0,'',0,1),
 	(22,'AlidayuApiEnv',4,'大鱼运行方式',7,'0:沙箱\r\n1:正常','',0,0,'1',0,1),
-	(23,'MAIL_SECURE',1,'加密方式',1,'','发送邮件的加密方式SSL',0,0,'ssl',0,0);
+	(23,'MAIL_SECURE',1,'加密方式',2,'','发送邮件的加密方式SSL',0,0,'ssl',0,1),
+	(24,'CONFIG_GROUP_LIST',3,'配置分组',4,'','配置分组',1379228036,1384418383,'1:基本\r\n2:邮件\r\n3:用户\r\n4:备份\r\n7:短信',4,0),
+	(25,'DATA_BACKUP_PATH',1,'数据库备份根路径',4,'','路径必须以 / 结尾',1381482411,1381482411,'./Data/',1,1),
+	(26,'DATA_BACKUP_PART_SIZE',0,'数据库备份卷大小',4,'','该值用于限制压缩后的分卷最大长度。单位：B；建议设置20M',1381482488,1381729564,'20971520',2,1),
+	(27,'DATA_BACKUP_COMPRESS',4,'数据库备份文件是否启用压缩',4,'0:不压缩\r\n1:启用压缩','压缩备份文件需要PHP环境支持gzopen,gzwrite函数',1381713345,1381729544,'1',3,1),
+	(28,'DATA_BACKUP_COMPRESS_LEVEL',4,'数据库备份文件压缩级别',4,'1:普通\r\n4:一般\r\n9:最高','数据库备份文件的压缩级别，该配置在开启压缩时生效',1381713408,1381713408,'9',4,1),
+	(29,'SHOW_PAGE_TRACE',4,'是否显示页面Trace',4,'0:关闭\r\n1:开启','是否显示页面Trace信息',1387165685,1387165685,'0',1,0);
 
 /*!40000 ALTER TABLE `tr_config` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -133,6 +140,31 @@ VALUES
 	(21,'音乐舞蹈学院');
 
 /*!40000 ALTER TABLE `tr_department` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Dump of table tr_feedback
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `tr_feedback`;
+
+CREATE TABLE `tr_feedback` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `from` varchar(64) DEFAULT '',
+  `content` varchar(200) NOT NULL DEFAULT '',
+  `stats` tinyint(3) DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+LOCK TABLES `tr_feedback` WRITE;
+/*!40000 ALTER TABLE `tr_feedback` DISABLE KEYS */;
+
+INSERT INTO `tr_feedback` (`id`, `from`, `content`, `stats`)
+VALUES
+	(1,'','ok',1),
+	(2,'york_mail@qq.com','测试正常',1);
+
+/*!40000 ALTER TABLE `tr_feedback` ENABLE KEYS */;
 UNLOCK TABLES;
 
 
@@ -238,6 +270,82 @@ VALUES
 UNLOCK TABLES;
 
 
+# Dump of table tr_member
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `tr_member`;
+
+CREATE TABLE `tr_member` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `username` char(16) DEFAULT NULL,
+  `password` char(32) DEFAULT NULL,
+  `login` int(10) unsigned NOT NULL DEFAULT '0',
+  `last_login_ip` bigint(20) NOT NULL DEFAULT '0',
+  `last_login_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `status` tinyint(3) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+LOCK TABLES `tr_member` WRITE;
+/*!40000 ALTER TABLE `tr_member` DISABLE KEYS */;
+
+INSERT INTO `tr_member` (`id`, `username`, `password`, `login`, `last_login_ip`, `last_login_time`, `status`)
+VALUES
+	(1,'admin','bac5f7756f975153544693aeddecbcdc',0,0,0,1);
+
+/*!40000 ALTER TABLE `tr_member` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Dump of table tr_news
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `tr_news`;
+
+CREATE TABLE `tr_news` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `category` int(10) unsigned NOT NULL DEFAULT '0',
+  `title` char(80) NOT NULL DEFAULT '',
+  `content` text,
+  `create_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `status` tinyint(2) NOT NULL DEFAULT '1',
+  `display` tinyint(3) unsigned NOT NULL DEFAULT '1',
+  `wid` int(11) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+
+LOCK TABLES `tr_news` WRITE;
+/*!40000 ALTER TABLE `tr_news` DISABLE KEYS */;
+
+INSERT INTO `tr_news` (`id`, `category`, `title`, `content`, `create_time`, `status`, `display`, `wid`)
+VALUES
+	(2,2,'服务协议','&lt;h4 style=&quot;font-family: Simsun; font-size: medium; white-space: normal; text-align: center;&quot;&gt;社团招新管理云平台服务协议&lt;/h4&gt;&lt;p&gt;1.拟定中。。。&lt;/p&gt;',1451664000,1,1,0),
+	(3,2,'常见问题','&lt;p style=&quot;font-family: Simsun; font-size: medium; white-space: normal;&quot;&gt;如何加入？&lt;/p&gt;&lt;p style=&quot;font-family: Simsun; font-size: medium; white-space: normal;&quot;&gt;哈哈&lt;/p&gt;',1451664000,1,1,0),
+	(4,2,'关于我们','&lt;p&gt;我们就是我们。&lt;/p&gt;',1451664000,1,1,0),
+	(5,1,'系统公告','&lt;p&gt;系统正在开发中，敬请期待！&lt;/p&gt;',1456070400,1,1,0);
+
+/*!40000 ALTER TABLE `tr_news` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Dump of table tr_picture
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `tr_picture`;
+
+CREATE TABLE `tr_picture` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `path` varchar(255) NOT NULL DEFAULT '',
+  `md5` char(32) NOT NULL DEFAULT '',
+  `sha1` char(40) NOT NULL DEFAULT '',
+  `status` tinyint(2) NOT NULL DEFAULT '0',
+  `create_time` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+
 # Dump of table tr_team
 # ------------------------------------------------------------
 
@@ -267,6 +375,47 @@ CREATE TABLE `tr_team` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+# Dump of table tr_web_menu
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `tr_web_menu`;
+
+CREATE TABLE `tr_web_menu` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(50) NOT NULL DEFAULT '',
+  `pid` int(10) unsigned NOT NULL DEFAULT '0',
+  `sort` int(10) unsigned NOT NULL DEFAULT '0',
+  `url` char(255) NOT NULL DEFAULT '',
+  `hide` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `tip` varchar(255) NOT NULL DEFAULT '',
+  `group` varchar(50) DEFAULT '',
+  `icon` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `pid` (`pid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+LOCK TABLES `tr_web_menu` WRITE;
+/*!40000 ALTER TABLE `tr_web_menu` DISABLE KEYS */;
+
+INSERT INTO `tr_web_menu` (`id`, `title`, `pid`, `sort`, `url`, `hide`, `tip`, `group`, `icon`)
+VALUES
+	(1,'管理首页',0,0,'Index/index',0,'','',''),
+	(2,'数据管理',0,2,'Config/index',0,'','微信','fa fa-comments'),
+	(11,'添加公告',2,22,'News/add',0,'','公告',''),
+	(10,'设置',2,1,'Config/weixin',0,'','设置','fa fa-cog'),
+	(9,'公告管理',2,21,'News/index',0,'','公告','fa fa-volume-up'),
+	(7,'修改密码',1,24,'Member/Password',1,'','用户',''),
+	(6,'还原数据',1,4,'Database/index/type/import',0,'','数据',''),
+	(5,'备份数据',1,3,'Database/index/type/export',0,'','数据','fa fa-hdd-o'),
+	(4,'管理员添加',1,0,'Member/add',0,'','管理员','fa fa-user'),
+	(3,'管理员管理',1,1,'Member/index',0,'','管理员',''),
+	(12,'修改公告',2,23,'News/edit',1,'','公告',''),
+	(13,'用户管理',2,37,'Team/index',0,'','用户','fa fa-user'),
+	(14,'用户修改',2,38,'Team/edit',1,'','用户',''),
+	(15,'修改密码',2,41,'Team/password',1,'','用户','');
+
+/*!40000 ALTER TABLE `tr_web_menu` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 

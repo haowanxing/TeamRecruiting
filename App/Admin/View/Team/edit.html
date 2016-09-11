@@ -1,0 +1,76 @@
+<extend name="Public/base"/>
+<block name="body">
+<div>
+<div class="page-head">
+	<h2>用户</h2>
+</div>
+<div class="cl-mcont">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="block-flat">
+				<div class="header">							
+					<h3 class="hthin">{$meta_title}</h3>
+				</div>
+				<div class="content">
+					<div class="tab-container">
+						<form action="{:U()}" class="form-horizontal"  method="post">
+							<div class="form-group">
+								<label class="col-sm-2 control-label">名称</label>
+								<div class="col-sm-6">
+									<input type="text" name="name" class="form-control" value="{$info.name|default=''}" placeholder="社团名称"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">邮箱</label>
+								<div class="col-sm-6">
+									<input type="text" name="email" class="form-control" value="{$info.email|default=''}" placeholder="邮箱"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">手机号</label>
+								<div class="col-sm-6">
+									<input type="number" name="phone" class="form-control" value="{$info.phone|default=''}" placeholder="手机"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">简介</label>
+								<div class="col-sm-6">
+									<textarea name="desc" class="form-control" rows="5" cols="50" placeholder="社团的简介">{$info.desc|default=''}</textarea>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">详细介绍</label>
+								<div class="col-sm-10">
+									<js href="__STATIC__/ueditor/ueditor.config.js" />
+									<js href="__STATIC__/ueditor/ueditor.all.js" />
+									<script id="container" name="intro" style="width:100%;height:500px;" type="text/plain">{$info.intro|htmlspecialchars_decode|stripslashes}</script>
+									<script type="text/javascript">
+										var ue = UE.getEditor('container',{
+													serverUrl :'{:U('Ueditor/Index')}',
+												UEDITOR_HOME_URL:'__STATIC__/ueditor/',
+										});
+									</script>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-offset-2 col-sm-10">
+									<input name="id" type="hidden" value="{$info.id}" />
+									<button class="btn btn-primary ajax-post" type="submit" target-form="form-horizontal">提 交</button>
+								</div>
+						  	</div>
+						</form>
+					</div>
+				</div>
+			</div>			
+		</div>
+	</div>
+</div>
+</block>
+<block name="script">
+	<js href="__STATIC__/uploadify/jquery.uploadify.min.js" />
+	<script type="text/javascript">
+		$(document).ready(function(){
+			highlight_subnav('{:U("Team/edit")}');
+		});
+	</script>
+</block>

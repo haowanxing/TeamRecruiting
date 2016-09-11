@@ -1,0 +1,94 @@
+<extend name="Public/base"/>
+
+<block name="body">
+<div>
+<div class="page-head">
+	<h2>用户</h2>
+</div>
+<div class="cl-mcont">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="block-flat">
+				<div class="header">							
+					<h3 class="hthin">{$meta_title}</h3>
+				</div>
+				<div class="content">
+					<div class="col-sm-12">
+						<label class="pull-left control-label">社团名称</label>
+						<div class="col-sm-3">
+							<input type="text" name="keyword" class="form-control">
+						</div>
+						<div class="col-sm-2">
+							<button type="button" id="search" url="{:U('')}" class="btn btn-success">搜素</button>
+						</div>
+					</div>
+					<table class="no-border blue">
+						<thead class="no-border">
+						<tr>
+							<th style="width:20%;">用户名</th>
+							<th style="width:10%;">邮箱</th>
+							<th style="width:20%;">描述</th>
+							<th style="width:10%;">官网</th>
+							<th style="width:10%;">手机号</th>
+							<th style="width:10%;">注册时间</th>
+							<th style="width:10%;">地址</th>
+							<th class="text-right">操作</th>
+						</tr>
+						</thead>
+						<notempty name="_list">
+						<tbody class="no-border-y">
+						<volist name="_list" id="vo">
+						<tr>
+							<td><img src="{$vo['headimgurl']}" class="img-thumbnail" style="height:60px;"/> {$vo['name']} (ID:{$vo['id']})</td>
+							<td>{$vo.email}</td>
+							<td>{$vo.desc}</td>
+							<td>{$vo.url}</td>
+							<td>{$vo.phone}</td>
+							<td>{$vo.create_time|time_format=###,"Y-m-d"}</td>
+							<td>{$vo['province']}-{$vo['city']}</td>
+							<td class="text-right">
+								<a data-placement="left" data-toggle="tooltip" data-original-title="修改密码" class="label label-primary" href="{:U('password?id='.$vo['id'])}"><i class="fa fa-pencil"></i></a>
+								<a data-placement="left" data-toggle="tooltip" data-original-title="修改资料" class="label label-success" href="{:U('edit?id='.$vo['id'])}"><i class="fa fa-pencil-square-o"></i></a>
+                				<a data-placement="left" data-toggle="tooltip" data-original-title="删除" class="label label-danger ajax-get" href="{:U('del?id='.$vo['id'])}"><i class="fa fa-times"></i></a>
+							</td>
+						</tr>
+						</volist>
+						</tbody>
+						<else/>
+						<td colspan="4"> aOh! 暂时还没有内容! </td>
+						</notempty>
+					</table>
+					<div class="content col-lg-12 pull-left">
+                        <div class="panel-foot text-center">
+                            <div class="page">{$_page}</div>
+                        </div>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</block>
+<block name="script">
+	<js href="__JS__/behaviour/weixin.js" />
+	<script type="text/javascript">
+		$(document).ready(function(){
+			highlight_subnav('{:U('Team/index')}');
+			//搜索功能
+			$("#search").click(function(){
+				var url = $(this).attr('url');
+				var query = $(this).parents().prev().children('input').serialize();
+		        query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g,'');
+		        query = query.replace(/^&/g,'');
+		        if( url.indexOf('?')>0 ){
+		            url += '&' + query;
+		        }else{
+		            url += '?' + query;
+		        }
+				window.location.href = url;
+			});
+		});
+	</script>
+</block>

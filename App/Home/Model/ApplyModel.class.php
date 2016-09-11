@@ -7,10 +7,10 @@ class ApplyModel extends RelationModel
 {
     protected $_validate = array(
             array('name', 'require', '姓名必须填写！'),
-            array('stuId', 'require', '学号必须填写！'),
+//            array('stuId', 'require', '学号必须填写！'),
             array('stuId', 'number', '学号必须为数字！'),
             array('stuId', '8,12', '学号长度必须为8-12位！', 0, 'length'),
-            array('phone', 'require', '手机必须填写！'),
+//            array('phone', 'require', '手机必须填写！'),
             array('phone', 'number', '手机必须为数字！'),
             array('phone', '11', '手机长度必须为11位！', 0, 'length'),
             array('tid,stuId', 'checkApply', '你已经申请过该社团', 1, 'callback',1),

@@ -58,6 +58,74 @@ function config_parse($type, $value){
     }
     return $value;
 }
+function list_to_tree($list, $pk='id', $pid = 'pid', $child = '_child', $root = 0) {
+    $tree = array();
+    if(is_array($list)) {
+        $refer = array();
+        foreach ($list as $key => $data) {
+            $refer[$data[$pk]] =& $list[$key];
+        }
+        foreach ($list as $key => $data) {
+            $parentId =  $data[$pid];
+            if ($root == $parentId) {
+                $tree[] =& $list[$key];
+            }else{
+                if (isset($refer[$parentId])) {
+                    $parent =& $refer[$parentId];
+                    $parent[$child][] =& $list[$key];
+                }
+            }
+        }
+    }
+    return $tree;
+}
+
+function tree_to_list($tree, $child = '_child', $order='id', &$list = array()){
+    if(is_array($tree)) {
+        $refer = array();
+        foreach ($tree as $key => $value) {
+            $reffer = $value;
+            if(isset($reffer[$child])){
+                unset($reffer[$child]);
+                tree_to_list($value[$child], $child, $order, $list);
+            }
+            $list[] = $reffer;
+        }
+        $list = list_sort_by($list, $order, $sortby='asc');
+    }
+    return $list;
+}
+
+function time_format($time = NULL,$format='Y-m-d H:i'){
+    $time = $time === NULL ? NOW_TIME : intval($time);
+    return date($format, $time);
+}
+
+function url_change($model,$params,$createl=false){
+    unset($params['name']);
+    $reurl = U($model,$params);
+    return $reurl;
+}
+
+
+function get_cover($cover_id, $field = null){
+    if(empty($cover_id)){
+        return false;
+    }
+    $picture = M('Picture')->where(array('status'=>1))->getById($cover_id);
+    if($picture){
+        $picture['path'] = __ROOT__.$picture['path'];
+    }
+    return empty($field) ? $picture : completion_pic($picture[$field]);
+}
+
+function completion_pic($url){
+    if(strpos($url,"http://") === 0){
+        return $url;
+    }else{
+        return C("WEB_URL").$url;
+    }
+}
 
 function SendMail($address, $title, $message, $fromname = '创明软件工作室')
 {
