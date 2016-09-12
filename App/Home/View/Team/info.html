@@ -9,14 +9,13 @@
   <meta name="keywords" content="{$web_keywords}"/>
   <load href="__PUBLIC__/css/weui.min.css"/>
   <link href="__PUBLIC__/css/common.css" rel="stylesheet">
-  <load href="__PUBLIC__/js/jquery-1.11.3.min.js"/>
 </head>
 <body>
 <div class="weui_tab">
   <div class="weui_tab_bd">
     <include file="./Public/Static/tpl/banner.html"/>
     <div class="weui_cells_title">社团信息</div>
-    <form id="form_info" method="post" action="{:U('Team/info')}">
+    <form class="form-user" method="post" action="{:U('Team/info')}">
       <div class="weui_cells weui_cells_form">
         <div class="weui_cell">
           <div class="weui_cell_hd">
@@ -34,7 +33,7 @@
         </div>
       </div>
       <div class="weui_btn_area">
-        <a class="weui_btn weui_btn_primary " href="javascript:" id="btn_update">更新信息</a>
+        <button type="submit" class="weui_btn weui_btn_primary ajax-post" target-form="form-user">更新信息</button>
       </div>
     </form>
   </div>
@@ -43,80 +42,9 @@
   </div>
 </div>
 
-
-<!--等待-->
-<div id="loadingToast" class="weui_loading_toast" style="display:none;">
-  <div class="weui_mask_transparent"></div>
-  <div class="weui_toast">
-    <div class="weui_loading">            <!-- :) -->
-      <div class="weui_loading_leaf weui_loading_leaf_0"></div>
-      <div class="weui_loading_leaf weui_loading_leaf_1"></div>
-      <div class="weui_loading_leaf weui_loading_leaf_2"></div>
-      <div class="weui_loading_leaf weui_loading_leaf_3"></div>
-      <div class="weui_loading_leaf weui_loading_leaf_4"></div>
-      <div class="weui_loading_leaf weui_loading_leaf_5"></div>
-      <div class="weui_loading_leaf weui_loading_leaf_6"></div>
-      <div class="weui_loading_leaf weui_loading_leaf_7"></div>
-      <div class="weui_loading_leaf weui_loading_leaf_8"></div>
-      <div class="weui_loading_leaf weui_loading_leaf_9"></div>
-      <div class="weui_loading_leaf weui_loading_leaf_10"></div>
-      <div class="weui_loading_leaf weui_loading_leaf_11"></div>
-    </div>
-    <p class="weui_toast_content">数据加载中</p>
-  </div>
-</div>
-
-<!--提交成功-->
-<div id="successToast" style="display: none;">
-  <div class="weui_mask_transparent"></div>
-  <div class="weui_toast">
-    <i class="weui_icon_toast"></i>
-    <p class="weui_toast_content">已完成</p>
-  </div>
-</div>
-
-<!--失败提示-->
-<div id="failToast" class="weui_dialog_alert" style="display: none;">
-  <div class="weui_mask"></div>
-  <div class="weui_dialog">
-    <div class="weui_dialog_hd"><strong class="weui_dialog_title">提交失败</strong></div>
-    <div id="failMsg" class="weui_dialog_bd">错误</div>
-    <div class="weui_dialog_ft">
-      <a href="javascript:;" class="weui_btn_dialog primary">确定</a>
-    </div>
-  </div>
-</div>
-
+<load href="__PUBLIC__/js/jquery-1.11.3.min.js"/>
 <load href="__PUBLIC__/js/public.js"/>
-<script>
-  $("#btn_update").click(function(){
-    $("#loadingToast").fadeIn();
-    $.ajax({
-      url: "{:U('Team/info')}",
-      type: "POST",
-      data: $("#form_info").serialize(),
-      async: true,
-      success: function (data) {
-        $("#loadingToast").fadeOut();
-        if (data.code == 200) {
-          $("#successToast").fadeIn();
-          setTimeout(function () {
-            $("#successToast").fadeOut();
-            location.href = "{:U('Team/info')}";
-          }, 1000);
-        } else {
-          $("#failMsg").html(data.msg);
-          $("#failToast").fadeIn();
-        }
-      },
-      error: function (err) {
-        console.log(err);
-        $("#loadingToast").fadeOut();
-        $("#failMsg").html("失败" + err);
-        $("#failToast").fadeIn();
-      },
-    });
-  });
-</script>
-</body>
+
+<load href="__PUBLIC__/Static/layer/layer.js"/>
+<load href="__PUBLIC__/js/ajax.js"/></body>
 </html>

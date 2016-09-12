@@ -56,11 +56,11 @@ class TeamController extends WebController {
     public function info(){
         if(IS_AJAX){
             if($res = D('Team')->updateInfo($this->tid)){
-                $retMsg = array('code'=>200,'data'=>$res,);
+                $this->success('更新成功!');
             }else{
-                $retMsg = array('code'=>400,'data'=>$res,'msg'=>'更新失败');
+                $error = D('Team')->getError();
+                $this->error(empty($error)?'未知错误! ':$error);
             }
-            $this->ajaxReturn($retMsg);
         }else{
             $this->display();
         }
