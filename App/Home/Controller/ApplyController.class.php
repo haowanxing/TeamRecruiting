@@ -2,7 +2,7 @@
 namespace Home\Controller;
 use Think\Controller;
 class ApplyController extends WebController {
-    public function index($t = 1){
+    public function join($t = 1){
         $this->departments = M('department')->select();
         $team = D('team')->getInfo($t);
         $this->team_id = $t;
