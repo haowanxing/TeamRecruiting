@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=0">
+  <title>社团列表-{$web_title}</title>
+  <meta name="description" content="{$web_description}"/>
+  <meta name="keywords" content="{$web_keywords}"/>
+  <load href="__PUBLIC__/css/weui.min.css"/>
+  <link href="__PUBLIC__/css/common.css" rel="stylesheet">
+  <load href="__PUBLIC__/js/jquery-1.11.3.min.js"/>
+</head>
+<body>
+<div class="container" id="container">
+  <div class="panel">
+    <include file="./Public/Static/tpl/banner.html"/>
+    <div class="bd">
+      <div class="weui_panel weui_panel_access">
+        <div class="weui_panel_hd">社团列表{$keywords}</div>
+        <div class="weui_panel_bd">
+          <volist name="lists" id="vo" empty="哎呀!怎么一个社团也没有?">
+          <a href="{:U('Apply/intro','tid='.$vo['id'])}" class="weui_media_box weui_media_appmsg">
+            <div class="weui_media_hd">
+              <img class="weui_media_appmsg_thumb" src="__ROOT__{$vo.logo}" alt="">
+            </div>
+            <div class="weui_media_bd">
+              <h4 class="weui_media_title">{$vo.name}</h4>
+              <p class="weui_media_desc">{$vo.desc}</p>
+            </div>
+          </a>
+          </volist>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<include file="./Public/Static/tpl/copyright.html"/>
+
+<load href="__PUBLIC__/js/public.js"/>
+
+</body>
+</html>

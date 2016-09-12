@@ -45,6 +45,13 @@ class TeamModel extends Model
         $res = $this->save();
         return $res;
     }
+    public function getTeam($page = 1, $num = 10, $condition = null){
+        if($condition){
+            return $this->field('password',true)->where($condition)->page($page, $num)->select();
+        }else{
+            return $this->field('password',true)->page($page,$num)->select();
+        }
+    }
     protected function verifyUser($uid, $password_in){
         $password = $this->getFieldById($uid, 'password');
         if(think_ucenter_md5($password_in) === $password){
