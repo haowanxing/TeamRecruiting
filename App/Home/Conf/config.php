@@ -27,8 +27,8 @@ return array(
     /* SESSION 和 COOKIE 配置 */
         'SESSION_PREFIX' => 'tr_teams_', //session前缀
         'COOKIE_PREFIX' => 'tr_teams_', // Cookie前缀 避免冲突
-//        'TMPL_ACTION_ERROR'   =>  './Template/Web/dispatch_jump.html',
-//        'TMPL_ACTION_SUCCESS'   =>  './Template/Web/dispatch_jump.html',
+        'TMPL_ACTION_ERROR'   =>  './Public/static/tpl/dispatch_jump.tpl',
+        'TMPL_ACTION_SUCCESS'   =>  './Public/static/tpl/dispatch_jump.tpl',
     // 'TMPL_EXCEPTION_FILE'  => './Template/Web/think_exception.html',
 
         'TMPL_PARSE_STRING' => array(
