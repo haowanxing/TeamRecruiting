@@ -34,7 +34,11 @@
           <hr>
           <section>
             <h3>2.详细介绍</h3>
-            <div>{$team.intro|htmlspecialchars_decode|stripslashes}</div>
+            <empty name="team.intro">
+              该社团还没有填写这一项呢
+              <else />
+              <div>{$team.intro|htmlspecialchars_decode|stripslashes}</div>
+            </empty>
           </section>
         </section>
       </article>
