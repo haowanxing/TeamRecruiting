@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=0">
+  <title>{$team.name}-{$web_title}</title>
+  <meta name="description" content="{$apply_description}"/>
+  <meta name="keywords" content="{$apply_keywords}"/>
+  <load href="__PUBLIC__/css/weui.min.css"/>
+  <load href="__PUBLIC__/css/common.css"/>
+  <load href="__PUBLIC__/js/jquery-1.11.3.min.js"/>
+</head>
+<body ontouchstart>
+<div class="container" id="container">
+  <div class="article">
+    <div class="hd">
+      <h1 class="page_title">{$team.name}</h1>
+      <div class="button">
+        <div class="button_sp_area">
+          <a href="{:U('Apply/join','tid='.$team['id'])}" class="weui_btn weui_btn_plain_primary">立即申请</a>
+        </div>
+      </div>
+    </div>
+    <div class="bd">
+      <article class="weui_article">
+        <h1>社团介绍:</h1>
+        <section>
+          <h2 class="title">1.简介</h2>
+          <section>
+            <h3>官网:{$team.url}</h3>
+            <p>{$team.desc}</p>
+          </section>
+          <hr>
+          <section>
+            <h3>2.详细介绍</h3>
+            <div>{$team.intro|htmlspecialchars_decode|stripslashes}</div>
+          </section>
+        </section>
+      </article>
+    </div>
+  </div>
+</div>
+<include file="./Public/Static/tpl/copyright.html"/>
+</body>
+</html>
