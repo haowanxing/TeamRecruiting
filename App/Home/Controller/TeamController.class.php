@@ -66,6 +66,7 @@ class TeamController extends WebController {
         }
     }
     public function setting(){
+        $applyOp = json_decode($this->team['applyop'],true);
         if(I('switch')){
             switch(I('switch')){
                 case 'notice':
@@ -81,7 +82,19 @@ class TeamController extends WebController {
                     $this->error('你按了什么东西');
                     break;
             }
-        }else{
+        }else if(I('apply')){
+            foreach(I('get.') as $key=>$value){
+                $applyOp[$value] = (int) !$applyOp[$value];
+            }
+            $res = M('Team')->where('id='.$this->tid)->setField('applyop',json_encode($applyOp));
+            if($res){
+                $this->success('Success!');
+            }else{
+                $this->error('Fail');
+            }
+        }
+        else{
+            $this->assign('applyop',$applyOp);
             $this->display();
         }
     }

@@ -34,7 +34,6 @@ class ApplyController extends WebController
     {
         $data = D('apply')->insertApply();
         if ($data) {
-            $retMsg = array('code' => 200, 'msg' => '申请记录已经保存!', 'info' => $data);
             $apply_team = D('team')->getInfo($data['tid']);
             if ($apply_team['notice']) {
                 $Title = "社团申请通知:" . $data['name'] . "申请加入" . $apply_team['name'];
@@ -44,16 +43,11 @@ class ApplyController extends WebController
 <br><br>
 温馨提示:本邮件由创明软件工作室自动发出,请不要直接进行回复此邮件!
 CONTENT;
-
                 SendMail_Sock($apply_team['email'], $Title, $Content, C('WEB_NAME'));
             }
+            $this->success('感谢您的申请!',U('Index/lists'));
         } else {
-            $retMsg = array('code' => 400, 'msg' => D("apply")->getError());
-        }
-        if (IS_AJAX) {
-            $this->ajaxReturn($retMsg);
-        } else {
-            $this->result = $retMsg;
+            $this->error(D("apply")->getError());
         }
     }
 
