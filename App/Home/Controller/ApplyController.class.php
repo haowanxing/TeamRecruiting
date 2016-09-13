@@ -12,6 +12,8 @@ class ApplyController extends WebController
         $this->team_id = $t;
         $this->index_title = $team['name'] . ' ';
         $this->apply_description = $team['desc'];
+        $this->assign('applyOp',json_decode($team['applyop'],true));
+        $this->assign('nations',M('Nations')->select());
         $this->display();
     }
 
