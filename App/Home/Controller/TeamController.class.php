@@ -36,11 +36,11 @@ class TeamController extends WebController {
     public function chpwd(){
         $this->display();
     }
-    public function applyList($page = 1,$condition = null){
+    public function applyList($page = 1, $num = 10, $condition = null){
         if($condition){
             $condition = json_decode($condition,true);
         }
-        $this->list = D('Apply')->getList($this->tid,$page,$condition);
+        $this->list = D('Apply')->getList($this->tid,$page,$num,$condition);
         if(IS_AJAX){
             if($this->list){
                 $retMsg = array('code'=>200,'data'=>$this->list);

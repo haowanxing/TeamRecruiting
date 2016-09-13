@@ -63,13 +63,13 @@ class ApplyModel extends RelationModel
         }
     }
 
-    public function getList($tid, $page = 1,$condition = null)
+    public function getList($tid, $page = 1, $num = 10,$condition = null)
     {
         if($condition){
             $data = $condition;
         }
         $data['tid'] = $tid;
-        $data = $this->relation(true)->where($data)->page($page, 10)->select();
+        $data = $this->relation(true)->where($data)->page($page, $num)->select();
         return $data;
     }
 }

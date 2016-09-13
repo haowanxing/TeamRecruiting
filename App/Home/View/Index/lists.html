@@ -9,16 +9,17 @@
   <meta name="keywords" content="{$web_keywords}"/>
   <load href="__PUBLIC__/css/weui.min.css"/>
   <link href="__PUBLIC__/css/common.css" rel="stylesheet">
+  <link href="__PUBLIC__/Static/dropload/dropload.css" rel="stylesheet">
   <load href="__PUBLIC__/js/jquery-1.11.3.min.js"/>
-</head>
+  <load href="__PUBLIC__/Static/dropload/dropload.min.js"/></head>
 <body>
 <div class="container" id="container">
   <div class="panel">
     <include file="./Public/Static/tpl/banner.html"/>
     <div class="bd">
-      <div class="weui_panel weui_panel_access">
+      <div class="weui_panel weui_panel_access content">
         <div class="weui_panel_hd">社团列表{$keywords}</div>
-        <div class="weui_panel_bd">
+        <div class="weui_panel_bd lists">
           <volist name="lists" id="vo" empty="哎呀!怎么一个社团也没有?">
           <a href="{:U('Apply/intro','tid='.$vo['id'])}" class="weui_media_box weui_media_appmsg">
             <div class="weui_media_hd">
@@ -38,6 +39,60 @@
 <include file="./Public/Static/tpl/copyright.html"/>
 
 <load href="__PUBLIC__/js/public.js"/>
+<script>
+  $(function () {
+    var page = 2;
+    var num = 10;
+    $('.content').dropload({
+      scrollArea: window,
+      autoLoad: false,
+      loadDownFn: function (me) {
+        var sendData = {page: page,num: num};
+        $.ajax({
+          type: 'GET',
+          url: '',
+          data: sendData,
+          dataType: 'json',
+          success: function (data) {
+            var result = '';
+            if (data.code == 200) {
+              page++;
+              var lists = data.data;
+              console.log(lists);
+              for (var i = 0; i < lists.length; i++) {
+                result += '<a href="{:U("Apply/intro")}?tid='+lists[i].id+'" class="weui_media_box weui_media_appmsg">' +
+                        '<div class="weui_media_hd">'+
+                        '<img class="weui_media_appmsg_thumb" src="__ROOT__'+lists[i].logo+'" alt="">'+
+                        '</div>'+
+                        '<div class="weui_media_bd">'+
+                        '<h4 class="weui_media_title">'+lists[i].name+'</h4>'+
+                        '<p class="weui_media_desc">'+lists[i].desc+'</p>'+
+                        '</div></a>';
+              }
+            } else {
+              // 锁定
+              me.lock();
+              // 无数据
+              me.noData();
+              //              break;
+            }
+            // 为了测试，延迟1秒加载
+            setTimeout(function () {
+              $('.lists').append(result);
+              // 每次数据加载完，必须重置
+              me.resetload();
+            }, 1000);
+          },
+          error: function (xhr, type) {
+            alert('Ajax error!');
+            // 即使加载出错，也得重置
+            me.resetload();
+          }
+        });
+      }
+    });
+  });
+</script>
 
 </body>
 </html>

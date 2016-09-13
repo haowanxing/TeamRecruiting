@@ -13,11 +13,19 @@ class IndexController extends WebController
     public function lists($page = 1, $num = 10, $condition = null)
     {
         if($condition){
-            $this->lists = D('Team')->getTeam($page,$num,$condition);
-        }else{
-            $this->lists = D('Team')->getTeam($page,$num);
+            $condition = json_decode($condition,true);
         }
-        $this->display();
+        $this->lists = D('Team')->getTeam($page,$num,$condition);
+        if(IS_AJAX){
+            if($this->lists){
+                $retMsg = array('code'=>200,'data'=>$this->lists);
+            }else{
+                $retMsg = array('code'=>400,'msg'=>'empty');
+            }
+            $this->ajaxReturn($retMsg);
+        }else{
+            $this->display();
+        }
     }
 
     public function ok($msg = '感谢您的使用!')
