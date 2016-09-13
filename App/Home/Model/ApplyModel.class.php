@@ -49,9 +49,11 @@ class ApplyModel extends RelationModel
             return false;
         }
         if ($res = $this->add($data)) {
-
+            return $data;
+        }else{
+            $this->error = '保存记录失败!';
+            return false;
         }
-        return $data;
     }
     public function checkApply($map){
         $data['tid'] = $map['tid'];
