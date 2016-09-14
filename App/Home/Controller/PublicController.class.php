@@ -58,7 +58,7 @@ class PublicController extends WebController
                 $this->error($error, $url);
             }
         } else {
-            if (is_login()) {
+            if (D('Public')->check_login()) {
                 $this->redirect('Team/index');
             } else {
                 $this->display();
@@ -81,7 +81,7 @@ class PublicController extends WebController
         if (!C('USER_ALLOW_REGISTER')) {
             $this->error('注册已经关闭，请稍后注册~');
         }
-        if(is_login()){
+        if(D('Public')->check_login()){
             $this->error('请退出当前用户再进行操作',U('Team/index'));
         }
         if (IS_POST) {

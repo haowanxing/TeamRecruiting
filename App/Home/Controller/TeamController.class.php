@@ -9,8 +9,8 @@ class TeamController extends WebController {
             S('DB_CONFIG_DATA',$config);
         }
         C($config);
-        if (!$this->tid = is_login()) {
-            $this->redirect('Public/login');
+        if (!$this->tid = D('Public')->check_login()) {
+            $this->error(D('Public')->getError(),U('Public/login'));
         }else{
             $this->team = D('team')->getInfo($this->tid);
         }

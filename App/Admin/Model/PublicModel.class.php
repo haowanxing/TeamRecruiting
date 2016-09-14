@@ -1,52 +1,73 @@
 <?php
 namespace Admin\Model;
+
 use Think\Model;
 
-class PublicModel extends Model {
-	Protected $autoCheckFields = false;
+class PublicModel extends Model
+{
+    Protected $autoCheckFields = false;
 
+    public function check_login()
+    {
+        if ($mid = is_login()) {
+            $TeamInfo = M('Member')->where('id=' . session('user_auth')['mid'])->find();
+            if ($TeamInfo['session_admin'] != session_id()) {
+                $this->error = '当前用户已经在其他地方使用!';
+                return false;
+            } else {
+                return $mid;
+            }
+        } else {
+            $this->error = '没有登录!';
+            return false;
+        }
+    }
+    public function login($username, $password)
+    {
+        $map = array();
+        $map['username'] = $username;
+        $map['status'] = 1;
+        $user = M('Member')->where($map)->find();
+        if (is_array($user)) {
+            if (think_ucenter_md5($password) === $user['password']) {
+                $this->autoLogin($user);
+                return $user['id'];
+            } else {
+                return -2;
+            }
+        } else {
+            return -1;
+        }
+    }
 
-	public function login($username, $password){
-		$map = array();
-		$map['username'] = $username;
-		$map['status'] = 1;
-		$user = M('Member')->where($map)->find();
-		if(is_array($user)){
-			if(think_ucenter_md5($password) === $user['password']){
-				$this->autoLogin($user);
-				return $user['id'];
-			} else {
-				return -2;
-			}
-		} else {
-			return -1;
-		}
-	}
-	
-    private function autoLogin($user){
+    private function autoLogin($user)
+    {
         $data = array(
-            'id'             => $user['id'],
-            'login'           => array('exp', '`login`+1'),
-            'last_login_time' => NOW_TIME,
-            'last_login_ip'   => get_client_ip(1),
+                'id' => $user['id'],
+                'login' => array('exp', '`login`+1'),
+                'last_login_time' => NOW_TIME,
+                'last_login_ip' => get_client_ip(1),
+                'session_admin' => session_id(),
         );
         M("Member")->save($data);
         $auth = array(
-            'uid'             => $user['id'],
-            'username'        => $user['username'],
-            'last_login_time' => $user['last_login_time'],
+                'mid' => $user['id'],
+                'username' => $user['username'],
+                'last_login_time' => $user['last_login_time'],
         );
         session('user_auth', $auth);
         session('user_auth_sign', data_auth_sign($auth));
     }
 
-	public function logout(){
+    public function logout()
+    {
         session('user_auth', null);
         session('user_auth_sign', null);
     }
-	
-	public function info($uid){
-		$map['id'] = $uid;
-		return M('Users')->where($map)->find();
-	}
+
+    public function info($uid)
+    {
+        $map['id'] = $uid;
+        return M('Users')->where($map)->find();
+    }
 }
