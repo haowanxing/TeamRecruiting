@@ -7,7 +7,7 @@
 #
 # Host: localhost (MySQL 5.6.19)
 # Database: teamrecruit
-# Generation Time: 2016-09-11 05:03:03 +0000
+# Generation Time: 2016-09-14 15:38:39 +0000
 # ************************************************************
 
 
@@ -34,6 +34,12 @@ CREATE TABLE `tr_apply` (
   `stuId` varchar(12) NOT NULL DEFAULT '',
   `dep` int(11) NOT NULL,
   `major` int(11) NOT NULL,
+  `nation` tinyint(2) DEFAULT NULL,
+  `origin` char(20) DEFAULT NULL,
+  `pic` varchar(64) DEFAULT NULL,
+  `qq` char(11) DEFAULT NULL,
+  `skill` varchar(100) DEFAULT NULL,
+  `reason` varchar(200) DEFAULT NULL,
   `interest` varchar(200) DEFAULT NULL,
   `time` int(11) NOT NULL,
   PRIMARY KEY (`id`)
@@ -78,7 +84,7 @@ VALUES
 	(7,'WEB_NAME',1,'网站名称',1,'','网站名称',0,0,'社团招新管理系统',1,1),
 	(8,'WEB_LOGO',1,'网站logo',1,'','',0,0,'logo.png',3,1),
 	(9,'MAIL_SMTP',1,'SMTP服务器地址',2,'','SMTP服务器的地址',0,0,'smtp.exmail.qq.com',0,1),
-	(10,'MAIL_PORT',1,'SMTP服务器端口',2,'','SMTP服务器端口',0,0,'465',0,1),
+	(10,'MAIL_PORT',1,'SMTP服务器端口',2,'','SMTP服务器端口',0,0,'25',0,1),
 	(11,'MAIL_ADDRESS',1,'邮箱地址',2,'','发件邮箱地址',0,0,'',0,1),
 	(12,'MAIL_PASSWORD',1,'邮箱密码',2,'','发件邮箱密码',0,0,'',0,1),
 	(13,'MAIL_LOGINNAME',1,'邮箱登录账号',2,'','登录邮箱账号',0,0,'',0,1),
@@ -282,6 +288,7 @@ CREATE TABLE `tr_member` (
   `login` int(10) unsigned NOT NULL DEFAULT '0',
   `last_login_ip` bigint(20) NOT NULL DEFAULT '0',
   `last_login_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `session_admin` varchar(32) NOT NULL DEFAULT '',
   `status` tinyint(3) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
@@ -290,11 +297,88 @@ CREATE TABLE `tr_member` (
 LOCK TABLES `tr_member` WRITE;
 /*!40000 ALTER TABLE `tr_member` DISABLE KEYS */;
 
-INSERT INTO `tr_member` (`id`, `username`, `password`, `login`, `last_login_ip`, `last_login_time`, `status`)
+INSERT INTO `tr_member` (`id`, `username`, `password`, `login`, `last_login_ip`, `last_login_time`, `session_admin`, `status`)
 VALUES
-	(1,'admin','bac5f7756f975153544693aeddecbcdc',0,0,0,1);
+	(1,'admin','bac5f7756f975153544693aeddecbcdc',0,0,0,'',1);
 
 /*!40000 ALTER TABLE `tr_member` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Dump of table tr_nations
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `tr_nations`;
+
+CREATE TABLE `tr_nations` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` char(10) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+LOCK TABLES `tr_nations` WRITE;
+/*!40000 ALTER TABLE `tr_nations` DISABLE KEYS */;
+
+INSERT INTO `tr_nations` (`id`, `name`)
+VALUES
+	(1,'汉族'),
+	(2,'蒙古族'),
+	(3,'回族'),
+	(4,'藏族'),
+	(5,'维吾尔族'),
+	(6,'苗族'),
+	(7,'彝族'),
+	(8,'壮族'),
+	(9,'布依族'),
+	(10,'朝鲜族'),
+	(11,'满族'),
+	(12,'侗族'),
+	(13,'瑶族'),
+	(14,'白族'),
+	(15,'土家族'),
+	(16,'哈尼族'),
+	(17,'哈萨克族'),
+	(18,'傣族'),
+	(19,'黎族'),
+	(20,'傈僳族'),
+	(21,'佤族'),
+	(22,'畲族'),
+	(23,'高山族'),
+	(24,'拉祜族'),
+	(25,'水族'),
+	(26,'东乡族'),
+	(27,'纳西族'),
+	(28,'景颇族'),
+	(29,'柯尔克孜族'),
+	(30,'土族'),
+	(31,'达斡尔族'),
+	(32,'仫佬族'),
+	(33,'羌族'),
+	(34,'布朗族'),
+	(35,'撒拉族'),
+	(36,'毛难族'),
+	(37,'仡佬族'),
+	(38,'锡伯族'),
+	(39,'阿昌族'),
+	(40,'普米族'),
+	(41,'塔吉克族'),
+	(42,'怒族'),
+	(43,'乌孜别克族'),
+	(44,'俄罗斯族'),
+	(45,'鄂温克族'),
+	(46,'崩龙族'),
+	(47,'保安族'),
+	(48,'裕固族'),
+	(49,'京族'),
+	(50,'塔塔尔族'),
+	(51,'独龙族'),
+	(52,'鄂伦春族'),
+	(53,'赫哲族'),
+	(54,'门巴族'),
+	(55,'珞巴族'),
+	(56,'基诺族');
+
+/*!40000 ALTER TABLE `tr_nations` ENABLE KEYS */;
 UNLOCK TABLES;
 
 
@@ -363,7 +447,8 @@ CREATE TABLE `tr_team` (
   `logo` varchar(120) DEFAULT NULL,
   `phone` char(20) DEFAULT '0',
   `location` varchar(120) DEFAULT NULL,
-  `notice` tinyint(4) NOT NULL DEFAULT '1',
+  `notice` tinyint(4) NOT NULL DEFAULT '0',
+  `applyop` varchar(220) DEFAULT '{"reason":0,"qq":0,"stuId":1,"nation":1,"origin":0,"pic":0,"skill":0}',
   `create_time` int(10) unsigned NOT NULL,
   `login_time` int(11) unsigned DEFAULT NULL,
   `login_ip` bigint(20) NOT NULL DEFAULT '0',
@@ -372,8 +457,11 @@ CREATE TABLE `tr_team` (
   `province` char(20) DEFAULT '',
   `city` char(20) DEFAULT '',
   `country` char(20) DEFAULT NULL,
+  `session` varchar(32) NOT NULL DEFAULT '',
+  `sort` tinyint(3) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 
 # Dump of table tr_web_menu
 # ------------------------------------------------------------
