@@ -17,14 +17,14 @@ class ApplyController extends WebController
         $this->display();
     }
 
-    public function intro($tid)
+    public function intro($t)
     {
-        if (!$tid) {
+        if (!$t) {
             $this->error('页面不存在');
         } else {
-            $team = D('Team')->getInfo($tid);
+            $team = D('Team')->getInfo($t);
             if (!$team) {
-                $this->error('找不到该团队!');
+                $this->error('找不到该社团!');
             }else{
                 $this->assign('team',$team);
                 $this->display();
