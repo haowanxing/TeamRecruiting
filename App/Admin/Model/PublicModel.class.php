@@ -51,7 +51,7 @@ class PublicModel extends Model
         );
         M("Member")->save($data);
         $auth = array(
-                'mid' => $user['id'],
+                'uid' => $user['id'],
                 'username' => $user['username'],
                 'last_login_time' => $user['last_login_time'],
         );
