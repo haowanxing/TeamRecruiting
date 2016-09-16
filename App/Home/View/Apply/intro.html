@@ -18,7 +18,7 @@
       <h1 class="page_title">{$team.name}</h1>
       <div class="button">
         <div class="button_sp_area">
-          <a href="{:U('Apply/join','tid='.$team['id'])}" class="weui_btn weui_btn_plain_primary">立即申请</a>
+          <a href="{:U('Apply/join','t='.$team['id'])}" class="weui_btn weui_btn_plain_primary">立即申请</a>
         </div>
       </div>
     </div>
@@ -43,8 +43,10 @@
         </section>
       </article>
     </div>
+    <div class="ft">
+      <include file="./Public/Static/tpl/copyright.html"/>
+    </div>
   </div>
 </div>
-<include file="./Public/Static/tpl/copyright.html"/>
 </body>
 </html>

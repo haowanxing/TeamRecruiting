@@ -23,7 +23,7 @@ class TeamModel extends Model
     {
         $map['id'] = $uid;
         $map['status'] = 1;
-        $info = $this->where($map)->field('id,name,email,phone,desc,intro,create_time')->find();
+        $info = $this->where($map)->field('id,name,email,phone,desc,logo,url,intro,create_time')->find();
         return $info;
     }
 
