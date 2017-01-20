@@ -38,11 +38,11 @@ class MemberModel extends Model {
             $this->error = '您输入的新密码与确认密码不一致！';
 			return false;
         }
-		if(!$this->verifyUser(UID, I('post.oldpassword'))){
+		if(!$this->verifyUser($data['id'], I('post.oldpassword'))){
 			$this->error = '验证出错：密码不正确！';
 			return false;
 		}
-        $this->id=UID;
+//        $this->id=UID;
         $res = $this->save();
         return $res;
     }

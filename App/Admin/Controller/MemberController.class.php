@@ -27,7 +27,7 @@ class MemberController extends WebController {
 				$this->error(D('Member')->getError());
 			}
 		 }else{
-		 	$username = M('Member')->getFieldById(UID, 'username');
+		 	$username = M('Member')->getFieldById(I('get.id',0), 'username');
 			$this->assign('username', $username);
 			$this->meta_title = '修改密码';
 			$this->display();
